@@ -1,26 +1,34 @@
-cmake_minimum_required(VERSION 3.22)
-project(libfzn)
+cmake_minimum_required(VERSION 3.28)
+project(libfzn CXX)
 
 # C++
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-enable_language(CXX)
+
+# Dependency
+include(FetchContent)
+FetchContent_Declare(
+        peglib
+        GIT_REPOSITORY https://github.com/yhirose/cpp-peglib.git
+        GIT_TAG        master
+)
+set(BUILD_TESTS OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(peglib)
 
 # Sources
-set(LIBFZN_SRC Parser.cpp Printer.cpp)
+set(LIBFZN_SRC
+    Parser.cpp
+    Printer.cpp
+)
 
 # Library
 add_library(libfzn ${LIBFZN_SRC})
 set_target_properties(libfzn PROPERTIES PREFIX "")
-
-# Includes
-if(PROJECT_IS_TOP_LEVEL)
-    target_include_directories(libfzn PRIVATE ${PROJECT_SOURCE_DIR})
-else()
-    cmake_path(GET PROJECT_SOURCE_DIR PARENT_PATH PROJECT_PARENT_DIR)
-    target_include_directories(libfzn INTERFACE ${PROJECT_PARENT_DIR})
-endif()
+target_link_libraries(libfzn PUBLIC peglib)
+target_include_directories(libfzn PUBLIC ${PROJECT_SOURCE_DIR})
 
 # Demo
-add_executable(libfzn-demo EXCLUDE_FROM_ALL Demo.cpp)
-target_link_libraries(libfzn-demo libfzn)
+if (PROJECT_IS_TOP_LEVEL)
+    add_executable(libfzn-demo Demo.cpp)
+    target_link_libraries(libfzn-demo PRIVATE libfzn)
+endif()

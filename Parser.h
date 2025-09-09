@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "Model.h"
-#include "peglib/peglib.h"
+#include <peglib.h>
 
 namespace Fzn
 {
