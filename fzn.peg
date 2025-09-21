@@ -1,7 +1,11 @@
 R"***(
 
 # FlatZinc Model
-fzn_model <- predicate* constant* variable* constraint* solve
+
+fzn_model <- (comment / predicate / constant / variable / constraint / solve)*
+
+# Comments
+comment <- "%" [^"\n"]* "\n"
 
 # Predicates
 predicate_parameter <- param_type ":" identifier
