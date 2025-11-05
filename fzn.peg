@@ -39,6 +39,7 @@ int_set <- "{" sequence(int_literal) "}"
 int_literal <- <[+-]?[0-9]+>
 float_literal <- <[+-]?[0-9]+"."[0-9]+>
 bool_literal <- "false" | "true"
+string_literal <- '"' <[A-Za-z0-9_'.''/']*> '"'
 
 # Identifiers
 identifier <- <[A-Za-z_][A-Za-z0-9_]*>
@@ -63,7 +64,7 @@ array_var_expr <- "[" sequence(basic_var_expr) "]"
 var_expr <- basic_var_expr / array_var_expr
 
 # Annotations
-annotation_arg <- int_literal / float_literal / identifier / "[" int_ranges "]"
+annotation_arg <- int_literal / float_literal / identifier / "[" int_ranges "]" / string_literal
 annotation_args <- ("(" sequence(annotation_arg) ")")?
 annotation <- pred_identifier annotation_args
 annotations <- ("::" annotation)*

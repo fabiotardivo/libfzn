@@ -31,7 +31,7 @@ namespace Fzn
     using basic_var_expr_t = std::string_view;
     using var_expr_t = std::variant<basic_var_expr_t, std::vector<basic_var_expr_t>>;
     // Annotations
-    using annotation_arg_t = std::variant<int, float, identifier_t, std::vector<int_range_t>>;
+    using annotation_arg_t = std::variant<int, float, std::string_view, std::vector<int_range_t>>;
     using annotation_t = std::pair<pred_identifier_t, std::vector<annotation_arg_t>>;
     // Search annotations
     using basic_search_annotation_t = std::tuple<pred_identifier_t, var_expr_t, std::vector<annotation_t>>;

@@ -283,6 +283,12 @@ void Fzn::Parser::add_literals_actions()
         auto const & bool_literal = vs.token();
         return bool_literal == "true";
     };
+
+    fzn_parser["string_literal"] = [](SemanticValues const & vs)
+    {
+        auto const & string_literal = vs.token();
+        return string_literal;
+    };
 }
 
 void Fzn::Parser::add_identifiers_actions()
@@ -396,7 +402,7 @@ void Fzn::Parser::add_annotation_actions()
     using namespace std;
     using namespace peg;
 
-    //annotation_arg <- int_literal / float_literal / identifier / "[" int_ranges "]"
+    //annotation_arg <- int_literal / float_literal / identifier / "[" int_ranges "]" / string_literal
     fzn_parser["annotation_arg"] = [](SemanticValues const & vs)
     {
         if (isType<int>(vs.at(0)))
@@ -409,9 +415,9 @@ void Fzn::Parser::add_annotation_actions()
             annotation_arg_t arg{any_cast<float>(vs.at(0))};
             return arg;
         }
-        if (isType<identifier_t>(vs.at(0)))
+        if (isType<std::string_view>(vs.at(0)))
         {
-            annotation_arg_t arg{any_cast<identifier_t>(vs.at(0))};
+            annotation_arg_t arg{any_cast<std::string_view>(vs.at(0))};
             return arg;
         }
         if (isType<vector<int_range_t>>(vs.at(0)))
